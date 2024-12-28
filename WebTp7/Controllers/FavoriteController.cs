@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebTp7.Services.ServiceContracts;
 using WebTp7.Services.Services;
 
 namespace WebTp7.Controllers;
-
+[Authorize (Roles = "customer,admin")]
 public class FavoriteController : Controller
 {
     protected readonly IFavoriteService _favoriteService;
