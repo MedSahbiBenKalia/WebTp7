@@ -1,0 +1,47 @@
+@model IEnumerable<WebTp7.Models.Genre>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Genres</h1>
+
+@if(User.IsInRole("dev"))
+{
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @if (User.IsInRole("dev"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete |</a>
+                    
+                }
+                
+                <a asp-controller="Movie"asp-action="index" asp-route-id="@item.Id">Movies</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\WebTp7.props" />
+</Project>

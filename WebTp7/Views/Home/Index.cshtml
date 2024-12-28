@@ -1,0 +1,35 @@
+﻿@using System.Security.Claims
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p class="display-4">Welcome @User.Identity?.Name!</p>
+    if(User.IsInRole("admin"))
+    {
+        
+        <p class="text-decoration-underline">you are an admin of this page!</p>
+    }
+    
+    <p> <a asp-controller="Movie" asp-action="Index">Movies</a>.</p>
+    <p> <a asp-controller="Genre" asp-action="Index">Genre</a>.</p>
+    <p> <a asp-controller="Movie" asp-action="getFavoriteMovies" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)"> my Favorite Movies</a>. </p>
+    if (User.IsInRole("admin"))
+    {
+        <p> <a asp-controller="User" asp-action="Index">Users</a>.</p>
+    }
+    
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p class="display-5 bg-warning">you are not signed in</p>
+        
+    </div>
+
+}
+
+

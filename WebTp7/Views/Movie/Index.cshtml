@@ -1,0 +1,95 @@
+@model IEnumerable<WebTp7.Models.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if(ViewBag.CorrectName != null)
+{
+    <h1>Genre : @ViewBag.CorrectName</h1>
+}
+else
+{
+<h1>All Movies</h1>
+}
+
+
+<div>
+    <a asp-action="Index" asp-route-genreId="">show all movies</a>
+</div>
+<div>
+    <a asp-controller="Genre" asp-action="Index" >show all Genres</a>
+</div>
+@if(User.IsInRole("admin"))
+{
+<div>
+    <a asp-controller="User" asp-action="Index" >show all Users</a>
+</div>
+}
+
+
+
+@if(User.IsInRole("dev"))
+{
+    <div>
+        <a asp-action="Create">Create New</a>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.Name) 
+            </td>
+            <td>
+                @if (item.Rating == 0)
+                {
+                <span>No Rating</span>
+                }
+                else
+                {
+                @Html.DisplayFor(modelItem => item.Rating) <span>⭐</span> 
+                }
+              
+            </td>
+            <td>
+                @if (User.IsInRole("dev"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete|</a>
+                }
+                
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

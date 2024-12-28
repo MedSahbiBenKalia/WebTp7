@@ -1,0 +1,113 @@
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebTp7.Models.MovieDetails
+
+@{
+ViewData["Title"] = "Details";
+Layout = "~/Views/Shared/_Layout.cshtml";
+bool hasfeedback = false;
+}
+
+@{
+bool isFavorite = Model?.Movie?.FavoriteByUsers?.Any(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ?? false;
+}
+
+
+<h1>Details</h1>
+
+<div>
+    <a asp-action="Index">show all movies</a>
+</div>
+
+<div>
+    <a asp-controller="Genre" asp-action="Index" >show all Genres</a>
+</div>
+
+@if (User.IsInRole("admin"))
+{
+    <div>
+        <a asp-controller="User" asp-action="Index">show all Users</a>
+    </div>
+}
+
+<div class="container mt-5">
+    <!-- Movie Details Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3>@(Model?.Movie?.Name ?? "No Title Available")</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Description:</strong> @(Model?.Movie?.Description ?? "No Description Available")</p>
+            <p><strong>Price:</strong> @(Model?.Movie?.Price.ToString("C") ?? "No Price Available")</p>
+            <p><strong>Genre:</strong> @(Model?.Movie?.Genre?.Name ?? "Unknown Genre")</p>
+            <p><strong>Rating:</strong> @(Model?.Movie?.Rating != 0 ? Model.Movie.Rating.ToString() + " ⭐" : "No Rating")</p>
+            @if (!isFavorite)
+            {
+                <p>
+                    <p class="text-danger">This movie is not in your favorites!</p>
+                    <a asp-controller="Favorite" asp-action="AddToFavorite"
+                       asp-route-UserId="@User.FindFirst(ClaimTypes.NameIdentifier).Value"
+                       asp-route-MovieId="@Model?.Movie?.Id"
+                       class="btn btn-primary">Add to Favorite</a>
+                </p>
+            }
+            else
+            {
+                <p class="text-success">This movie is already in your favorites!</p>
+                <a asp-controller="Favorite" asp-action="RemoveFromFavorite"
+                   asp-route-UserId="@User.FindFirst(ClaimTypes.NameIdentifier).Value"
+                   asp-route-MovieId="@Model?.Movie?.Id"
+                   class="btn btn-danger">Remove from Favorite</a>
+                
+            }
+        
+        
+            </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h4>Feedbacks</h4>
+        </div>
+        <div class="card-body">
+            @if (Model?.FeedBacks != null && Model.FeedBacks.Count > 0)
+            {
+                <ul class="list-group">
+                    @foreach (var feedback in Model.FeedBacks)
+                    {
+                        <li class="list-group-item">
+                            <p><strong>User:</strong> @(feedback.User?.UserName ?? "Anonymous")</p>
+                            <p><strong>Rating:</strong> @(feedback.Rating.HasValue ? feedback.Rating.ToString()+ " ⭐" : "No Rating")</p>
+                            <p><strong>Comment:</strong> @(feedback.Comment ?? "No Comment")</p>
+                        
+                            @if(User.FindFirst(ClaimTypes.NameIdentifier)?.Value == feedback.User.Id)
+                            {
+                                hasfeedback = true;
+                            
+                                <p>
+                                    <a asp-controller="Feedback" asp-action="DeleteFeedback" asp-route-FeedbackId="@feedback.Id" asp-route-MovieId="@Model.Movie.Id" class="btn btn-danger">deleleFeedback</a>
+                                    <a asp-controller="Feedback" asp-action="UpdateFeedback" asp-route-FeedbackId="@feedback.Id"  class="btn btn-primary">UpdateFeedback</a>
+                                </p> 
+                         
+                            }
+                        </li>
+                    }
+                </ul>
+                
+            }
+            else
+            {
+                <p class="text-muted">No feedbacks available for this movie.</p>
+            }
+        </div>
+        @if(!hasfeedback)
+        {
+            <div class="card-footer">
+                <a asp-controller="Feedback" asp-action="AddFeedback" asp-route-MovieId="@Model.Movie.Id" class="btn btn-primary">Add Feedback</a>
+            </div>
+        }
+        
+    </div>
+</div>
+
