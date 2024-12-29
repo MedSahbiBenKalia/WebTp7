@@ -4,6 +4,7 @@ using WebTp7.Services.ServiceContracts;
 using WebTp7.Services.Services;
 
 namespace WebTp7.Controllers;
+
 [Authorize (Roles = "customer,admin")]
 public class FavoriteController : Controller
 {

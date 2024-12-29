@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebTp7")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb6868a921b69e128d29907a38403cda1c05b433")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c542fb2a86a707f56a7b92e9264a4476939b0cda")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebTp7")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebTp7")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
